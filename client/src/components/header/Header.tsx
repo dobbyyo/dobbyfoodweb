@@ -100,7 +100,9 @@ const Header = () => {
     Router.push('/join');
   }, []);
   const onMyPage = useCallback(() => {
-    Router.push('/account/edit');
+    if (me) {
+      Router.push(`/user/${me.id}`);
+    }
   }, []);
   const onPost = useCallback(() => {
     Router.push('/upload');
@@ -124,6 +126,9 @@ const Header = () => {
   const onRemove = useCallback(() => {
     reset();
   }, []);
+  const onFeed = useCallback(() => {
+    Router.push('/feed');
+  }, []);
 
   return (
     <HeaderContainer>
@@ -131,7 +136,7 @@ const Header = () => {
         <FontAwesomeIcon icon={faBowlFood} className="logo" style={{ color: 'green' }} onClick={onHome} />
         <span>Mountain</span>
         <MenuContainer>
-          <Menu>피드</Menu>
+          <Menu onClick={onFeed}>피드</Menu>
           <Menu>한식</Menu>
           <Menu>일식</Menu>
           <Menu>양식</Menu>

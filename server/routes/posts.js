@@ -203,4 +203,195 @@ router.get("/:category/all", async (req, res, next) => {
   }
 });
 
+// 한식
+router.get("/korea", async (req, res, next) => {
+  try {
+    const posts = await Post.findAll({
+      where: {
+        kinds: "한식",
+      },
+      limit: 5,
+      order: [
+        ["createdAt", "DESC"],
+        [Comment, "createdAt", "DESC"],
+      ],
+      include: [
+        {
+          model: User,
+          attributes: ["id", "nickname", "email"],
+          include: [
+            {
+              model: Image,
+            },
+          ],
+        },
+        {
+          model: Image,
+        },
+        {
+          model: Comment,
+          include: [
+            {
+              model: User,
+              attributes: ["id", "nickname"],
+            },
+          ],
+        },
+        {
+          model: User,
+          as: "Likers",
+          attributes: ["id", "nickname"],
+        },
+      ],
+    });
+    res.status(200).json(posts);
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
+// 일식
+router.get("/japan", async (req, res, next) => {
+  try {
+    const posts = await Post.findAll({
+      where: {
+        kinds: "일식",
+      },
+      limit: 5,
+      order: [
+        ["createdAt", "DESC"],
+        [Comment, "createdAt", "DESC"],
+      ],
+      include: [
+        {
+          model: User,
+          attributes: ["id", "nickname", "email"],
+          include: [
+            {
+              model: Image,
+            },
+          ],
+        },
+        {
+          model: Image,
+        },
+        {
+          model: Comment,
+          include: [
+            {
+              model: User,
+              attributes: ["id", "nickname"],
+            },
+          ],
+        },
+        {
+          model: User,
+          as: "Likers",
+          attributes: ["id", "nickname"],
+        },
+      ],
+    });
+    res.status(200).json(posts);
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
+// 중식
+router.get("/china", async (req, res, next) => {
+  try {
+    const posts = await Post.findAll({
+      where: {
+        kinds: "중식",
+      },
+      limit: 5,
+      order: [
+        ["createdAt", "DESC"],
+        [Comment, "createdAt", "DESC"],
+      ],
+      include: [
+        {
+          model: User,
+          attributes: ["id", "nickname", "email"],
+          include: [
+            {
+              model: Image,
+            },
+          ],
+        },
+        {
+          model: Image,
+        },
+        {
+          model: Comment,
+          include: [
+            {
+              model: User,
+              attributes: ["id", "nickname"],
+            },
+          ],
+        },
+        {
+          model: User,
+          as: "Likers",
+          attributes: ["id", "nickname"],
+        },
+      ],
+    });
+    res.status(200).json(posts);
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
+// 양식
+router.get("/eu", async (req, res, next) => {
+  try {
+    const posts = await Post.findAll({
+      where: {
+        kinds: "양식",
+      },
+      limit: 5,
+      order: [
+        ["createdAt", "DESC"],
+        [Comment, "createdAt", "DESC"],
+      ],
+      include: [
+        {
+          model: User,
+          attributes: ["id", "nickname", "email"],
+          include: [
+            {
+              model: Image,
+            },
+          ],
+        },
+        {
+          model: Image,
+        },
+        {
+          model: Comment,
+          include: [
+            {
+              model: User,
+              attributes: ["id", "nickname"],
+            },
+          ],
+        },
+        {
+          model: User,
+          as: "Likers",
+          attributes: ["id", "nickname"],
+        },
+      ],
+    });
+    res.status(200).json(posts);
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
 module.exports = router;

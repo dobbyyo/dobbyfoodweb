@@ -263,6 +263,8 @@ router.get("/:postId", async (req, res, next) => {
       include: [
         {
           model: User,
+          attributes: ["id", "nickname", "email"],
+          include: [Image],
         },
         {
           model: Image,

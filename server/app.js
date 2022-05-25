@@ -38,6 +38,8 @@ app.use("/", express.static(path.join(__dirname, "postImg")));
 // "/"는 현재 서버 localhost3100을 의미  __dirname 뜻은 현재 풀더를 뜻함.
 app.use("/", express.static(path.join(__dirname, "userImg")));
 
+app.use("/", express.static(path.join(__dirname, "img")));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

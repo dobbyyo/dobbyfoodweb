@@ -6,6 +6,12 @@ import { darkTheme, GlobalStyles, lightTheme } from '../theme/styles';
 import Header from '../components/header/Header';
 import wrapper from '../store/configureStore';
 
+declare global {
+  interface Window {
+    kakao: any;
+  }
+}
+
 function DobbyFood({ Component, pageProps }: AppProps) {
   return (
     <ThemeProvider theme={lightTheme || darkTheme}>

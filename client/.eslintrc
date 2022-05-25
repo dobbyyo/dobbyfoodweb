@@ -34,6 +34,7 @@
     "react/jsx-props-no-spreading": "off",
     "implicit-arrow-linebreak": "off",
     "react/require-default-props": "off",
-    "no-alert": "off"
+    "no-alert": "off",
+    "max-len": "off"
   }
 }

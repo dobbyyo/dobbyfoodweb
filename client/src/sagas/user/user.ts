@@ -6,12 +6,24 @@ import {
   deleteUserFailure,
   deleteUserRequest,
   deleteUserSuccess,
+  followFailure,
+  followRequest,
+  followSuccess,
   joinFailure,
   joinRequest,
   joinSuccess,
   loadMyInfoFailure,
   loadMyInfoRequest,
   loadMyInfoSuccess,
+  loadOtherUserInfoFailure,
+  loadOtherUserInfoRequest,
+  loadOtherUserInfoSuccess,
+  loadUserFollowingsFailure,
+  loadUserFollowingsRequest,
+  loadUserFollowingsSuccess,
+  loadUserUnFollowersFailure,
+  loadUserUnFollowersRequest,
+  loadUserUnFollowersSuccess,
   loginFailure,
   loginRequest,
   loginSuccess,
@@ -21,6 +33,9 @@ import {
   passwordChangeFailure,
   passwordChangeRequest,
   passwordChangeSuccess,
+  unFollowFailure,
+  unFollowRequest,
+  unFollowSuccess,
   userChangeFailure,
   userChangeRequest,
   userChangeSuccess,
@@ -199,6 +214,111 @@ function* sagaUserImage() {
   yield takeLatest(userImageRequest.type, userImage);
 }
 
+// LOAD OTHER USER INFO
+async function loadOtherUserInfoAPI(userId: number) {
+  const res = await axios.get(`/user/${userId}`);
+  return res;
+}
+
+function* loadOtherUserInfo(action: PayloadAction<number>) {
+  try {
+    const result: AxiosResponse = yield call(loadOtherUserInfoAPI, action.payload);
+    yield put(loadOtherUserInfoSuccess(result.data));
+  } catch (error) {
+    const err = error as AxiosError;
+    console.error(err);
+    yield put(loadOtherUserInfoFailure(err.response?.data));
+  }
+}
+
+function* sagaLoadOtherUserInfo() {
+  yield takeLatest(loadOtherUserInfoRequest.type, loadOtherUserInfo);
+}
+
+// FOLLOW
+async function followAPI(userId: number) {
+  const res = await axios.patch(`/user/${userId}/follow`);
+  return res;
+}
+
+function* follow(action: PayloadAction<number>) {
+  try {
+    const result: AxiosResponse = yield call(followAPI, action.payload);
+    yield put(followSuccess(result.data));
+  } catch (error) {
+    const err = error as AxiosError;
+    console.error(err);
+    yield put(followFailure(err.response?.data));
+  }
+}
+
+function* sagaFollow() {
+  yield takeLatest(followRequest.type, follow);
+}
+
+// UNFOLLOW
+async function unFollowAPI(userId: number) {
+  const res = await axios.delete(`/user/${userId}/follow`);
+  return res;
+}
+
+function* unFollow(action: PayloadAction<number>) {
+  try {
+    const result: AxiosResponse = yield call(unFollowAPI, action.payload);
+    yield put(unFollowSuccess(result.data));
+  } catch (error) {
+    const err = error as AxiosError;
+    console.error(err);
+    yield put(unFollowFailure(err.response?.data));
+  }
+}
+
+function* sagaUnFollow() {
+  yield takeLatest(unFollowRequest.type, unFollow);
+}
+
+// LOAD USER FOLLOWINGS GET
+async function loadUserFollowingsAPI(userId: number) {
+  const res = await axios.get(`/user/${userId}/followings`);
+  return res;
+}
+
+function* loadUserFollowings(action: PayloadAction<number>) {
+  try {
+    const result: AxiosResponse = yield call(loadUserFollowingsAPI, action.payload);
+    yield put(loadUserFollowingsSuccess(result.data));
+  } catch (error) {
+    const err = error as AxiosError;
+    console.error(err);
+    yield put(loadUserFollowingsFailure(err.response?.data));
+  }
+}
+
+function* sagaLoadUserFollowings() {
+  yield takeLatest(loadUserFollowingsRequest.type, loadUserFollowings);
+}
+
+// LOAD USER UN FOLLOWERS GET
+async function loadUserFollowersAPI(userId: number) {
+  const res = await axios.get(`/user/${userId}/followers`);
+  return res;
+}
+
+function* loadUserFollowers(action: PayloadAction<number>) {
+  try {
+    const result: AxiosResponse = yield call(loadUserFollowersAPI, action.payload);
+    yield put(loadUserUnFollowersSuccess(result.data));
+  } catch (error) {
+    const err = error as AxiosError;
+    console.error(err);
+    yield put(loadUserUnFollowersFailure(err.response?.data));
+  }
+}
+
+function* sagaLoadUserFollowers() {
+  yield takeLatest(loadUserUnFollowersRequest.type, loadUserFollowers);
+}
+
 export default function* userSaga() {
   yield all([
     fork(sagaJoin),
@@ -209,5 +329,10 @@ export default function* userSaga() {
     fork(sagaPasswordChange),
     fork(sagaDeleteUser),
     fork(sagaUserImage),
+    fork(sagaLoadOtherUserInfo),
+    fork(sagaFollow),
+    fork(sagaUnFollow),
+    fork(sagaLoadUserFollowings),
+    fork(sagaLoadUserFollowers),
   ]);
 }

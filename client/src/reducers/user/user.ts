@@ -1,7 +1,18 @@
 /* eslint-disable max-len */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { EditPasswordProps, initialState, JoinProps, loginProps, MyInfo, UserChangeProps } from './userTypes';
+import {
+  EditPasswordProps,
+  FollowSuccess,
+  initialState,
+  JoinProps,
+  LoadUserFollow,
+  loginProps,
+  MyFollow,
+  MyInfo,
+  OtherUserInfo,
+  UserChangeProps,
+} from './userTypes';
 
 export const userSlice = createSlice({
   name: 'user',
@@ -158,6 +169,93 @@ export const userSlice = createSlice({
       state.me?.Posts.unshift({ id: action.payload });
     },
 
+    loadOtherUserInfoRequest: (state, _action: PayloadAction<number>) => {
+      state.loadOtherUserInfoLoading = true;
+      state.loadOtherUserInfoDone = false;
+      state.loadOtherUserInfoError = null;
+    },
+    loadOtherUserInfoSuccess: (state, action: PayloadAction<OtherUserInfo>) => {
+      state.loadOtherUserInfoLoading = false;
+      state.loadOtherUserInfoError = null;
+      state.loadOtherUserInfoDone = true;
+      state.userInfo = action.payload;
+    },
+    loadOtherUserInfoFailure: (state, action: PayloadAction<string | unknown>) => {
+      state.loadOtherUserInfoLoading = false;
+      state.loadOtherUserInfoDone = false;
+      state.loadOtherUserInfoError = action.payload;
+    },
+
+    followRequest: (state, _action: PayloadAction<number>) => {
+      state.followLoading = true;
+      state.followDone = false;
+      state.followError = null;
+    },
+    followSuccess: (state, action: PayloadAction<FollowSuccess>) => {
+      state.followLoading = false;
+      state.followError = null;
+      state.followDone = true;
+      state.me?.Followings.push({ id: action.payload.UserId });
+    },
+    followFailure: (state, action: PayloadAction<string | unknown>) => {
+      state.followLoading = false;
+      state.followDone = false;
+      state.followError = action.payload;
+    },
+
+    unFollowRequest: (state, _action: PayloadAction<number>) => {
+      state.unFollowLoading = true;
+      state.unFollowDone = false;
+      state.unFollowError = null;
+    },
+    unFollowSuccess: (state, action: PayloadAction<FollowSuccess>) => {
+      state.unFollowLoading = false;
+      state.unFollowError = null;
+      state.unFollowDone = true;
+      if (state.me?.Followings) {
+        state.me.Followings = state.me?.Followings.filter((v) => v.id !== action.payload.UserId);
+      }
+    },
+    unFollowFailure: (state, action: PayloadAction<string | unknown>) => {
+      state.unFollowLoading = false;
+      state.unFollowDone = false;
+      state.unFollowError = action.payload;
+    },
+
+    loadUserFollowingsRequest: (state, _action: PayloadAction<number>) => {
+      state.loadUserFollowingsLoading = true;
+      state.loadUserFollowingsDone = false;
+      state.loadUserFollowingsError = null;
+    },
+    loadUserFollowingsSuccess: (state, action: PayloadAction<any>) => {
+      state.loadUserFollowingsLoading = false;
+      state.loadUserFollowingsError = null;
+      state.loadUserFollowingsDone = true;
+      state.Followings = action.payload;
+    },
+    loadUserFollowingsFailure: (state, action: PayloadAction<string | unknown>) => {
+      state.loadUserFollowingsLoading = false;
+      state.loadUserFollowingsDone = false;
+      state.loadUserFollowingsError = action.payload;
+    },
+
+    loadUserUnFollowersRequest: (state, _action: PayloadAction<number>) => {
+      state.loadUserUnFollowersLoading = true;
+      state.loadUserUnFollowersDone = false;
+      state.loadUserUnFollowersError = null;
+    },
+    loadUserUnFollowersSuccess: (state, action: PayloadAction<any>) => {
+      state.loadUserUnFollowersLoading = false;
+      state.loadUserUnFollowersError = null;
+      state.loadUserUnFollowersDone = true;
+      state.Followers = action.payload;
+    },
+    loadUserUnFollowersFailure: (state, action: PayloadAction<string | unknown>) => {
+      state.loadUserUnFollowersLoading = false;
+      state.loadUserUnFollowersDone = false;
+      state.loadUserUnFollowersError = action.payload;
+    },
+
     // 이미지 제거
     removeImage: (state) => {
       state.imagePaths = [];
@@ -202,6 +300,21 @@ export const {
   userImageRequest,
   userImageSuccess,
   userImageFailure,
+  loadOtherUserInfoRequest,
+  loadOtherUserInfoSuccess,
+  loadOtherUserInfoFailure,
+  followRequest,
+  followSuccess,
+  followFailure,
+  unFollowRequest,
+  unFollowSuccess,
+  unFollowFailure,
+  loadUserFollowingsRequest,
+  loadUserFollowingsSuccess,
+  loadUserFollowingsFailure,
+  loadUserUnFollowersRequest,
+  loadUserUnFollowersSuccess,
+  loadUserUnFollowersFailure,
 } = actions;
 
 export default reducer;

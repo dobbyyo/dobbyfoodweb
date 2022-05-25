@@ -1,3 +1,4 @@
+import Router from 'next/router';
 import React, { useCallback, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
@@ -141,18 +142,18 @@ const UploadForm = () => {
     if (kinds === 'none') {
       return alert('종류를 선택해주세요!');
     }
-    // const formData = new FormData();
-    // imagePaths.forEach((img: any) => {
-    //   formData.append('image', img);
-    // });
-    // formData.append('title', title);
-    // formData.append('content', content);
-    // formData.append('hashtag', hashtag);
-    // formData.append('kinds', kinds);
-    // formData.append('activityName', activityName);
-    // formData.append('searchName', searchName);
-    // return dispatch(addPostRequest(formData));
-    // Router.back();
+    const formData = new FormData();
+    imagePaths.forEach((img: any) => {
+      formData.append('image', img);
+    });
+    formData.append('title', title);
+    formData.append('content', content);
+    formData.append('hashtag', hashtag);
+    formData.append('kinds', kinds);
+    formData.append('activityName', activityName);
+    formData.append('searchName', place);
+    dispatch(addPostRequest(formData));
+    return Router.back();
   }, [getValues, imagePaths]);
 
   console.log(place);
@@ -254,7 +255,7 @@ const UploadForm = () => {
               </Btn>
             )}
           </BtnContainer>
-          <Button type="submit" value="업로드" />
+          {pageNumber === 3 && <Button type="submit" value="업로드" />}
         </form>
       </FormBox>
     </AuthLayout>
