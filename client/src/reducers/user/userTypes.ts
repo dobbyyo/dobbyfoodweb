@@ -55,7 +55,15 @@ export interface MyInfo {
   Followers: any[];
   Image: null;
 }
-
+export interface Follow {
+  id: number;
+  name: string;
+  email: string;
+  nickname: string;
+  createdAt: Date;
+  updatedAt: Date;
+  Image: Image;
+}
 export interface UserChangeProps {
   data: FormData;
   UserId: number;

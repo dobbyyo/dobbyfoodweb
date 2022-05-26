@@ -1,13 +1,15 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBagShopping, faBowlFood, faPaintbrush, faSearch, faX } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faBowlFood, faSearch, faX } from '@fortawesome/free-solid-svg-icons';
 import { useSelector, useDispatch } from 'react-redux';
 import Router from 'next/router';
 import { useForm } from 'react-hook-form';
 
 import { RootState } from '../../reducers';
 import { logoutRequest } from '../../reducers/user/user';
+import Search from './Search';
+import SlideBox from './SliderBox';
 
 const HeaderContainer = styled.div`
   width: 100%;
@@ -19,11 +21,20 @@ const HeaderContainer = styled.div`
   justify-content: space-evenly;
   border-bottom: 1px solid ${(props) => props.theme.borderColor};
   position: sticky;
+  top: 0;
+  z-index: 999;
+  background-color: #fff;
   line-height: 25.6px;
   .logo {
     margin: 0 10px;
     cursor: pointer;
     font-size: 25px;
+  }
+  @media (min-width: 768px) and (max-width: 991px) {
+    justify-content: space-between;
+  }
+  @media (max-width: 767px) {
+    justify-content: space-between;
   }
 `;
 // 왼쪽
@@ -34,11 +45,22 @@ const LeftMenu = styled.div`
 const MenuContainer = styled.div`
   display: flex;
   margin-left: 20px;
+  @media (min-width: 768px) and (max-width: 991px) {
+    display: none;
+  }
+  @media (max-width: 767px) {
+    display: none;
+  }
 `;
 
 const Menu = styled.div`
   margin-right: 10px;
   cursor: pointer;
+  @media (min-width: 768px) and (max-width: 991px) {
+  }
+  @media (max-width: 767px) {
+    display: none;
+  }
 `;
 
 // 가운데
@@ -59,6 +81,12 @@ const Form = styled.div`
     margin: 0 10px;
     cursor: pointer;
   }
+  @media (min-width: 768px) and (max-width: 991px) {
+    display: none;
+  }
+  @media (max-width: 767px) {
+    display: none;
+  }
 `;
 
 // 오른쪽
@@ -66,28 +94,51 @@ const RightMenu = styled.div`
   display: flex;
   width: 33%;
   justify-content: end;
+  .searchLogo {
+    display: none;
+  }
   .pos {
     position: relative;
   }
+  .barLogo {
+    display: none;
+  }
+  @media (min-width: 768px) and (max-width: 991px) {
+    align-items: center;
+    .searchLogo {
+      margin-right: 10px;
+      display: flex;
+    }
+    .barLogo {
+      display: none;
+    }
+  }
+  @media (max-width: 767px) {
+    width: 70%;
+    align-items: center;
+    .searchLogo {
+      display: flex;
+    }
+    .barLogo {
+      display: flex;
+      margin: 0 10px;
+    }
+  }
 `;
-const SmallBox = styled.div`
-  width: 15px;
-  height: 15px;
-  background-color: yellowgreen;
-  border: 1px solid #000;
-  z-index: 999;
-  border-radius: 50%;
-  position: absolute;
-  top: 0;
-  right: 3px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+
+const InputOption = styled.select`
+  border: none;
+  padding-right: 1rem;
+  background-color: initial;
+  cursor: pointer;
+  height: 100%;
 `;
 
 const Header = () => {
   const { register, handleSubmit, getValues, reset } = useForm();
   const { me } = useSelector((state: RootState) => state.user);
+  const id = useSelector((state: RootState) => state.user.me?.id);
+
   const dispatch = useDispatch();
 
   const onHome = useCallback(() => {
@@ -100,9 +151,7 @@ const Header = () => {
     Router.push('/join');
   }, []);
   const onMyPage = useCallback(() => {
-    if (me) {
-      Router.push(`/user/${me.id}`);
-    }
+    Router.push(`/user/${id}`);
   }, []);
   const onPost = useCallback(() => {
     Router.push('/upload');
@@ -110,6 +159,7 @@ const Header = () => {
 
   const onLogout = useCallback(() => {
     dispatch(logoutRequest());
+    Router.push('/');
   }, []);
 
   const onSubmit = useCallback(() => {
@@ -130,46 +180,68 @@ const Header = () => {
     Router.push('/feed');
   }, []);
 
+  const [bar, setBar] = useState(false);
+  const [searchBar, setSearchBar] = useState(false);
+
+  const onSearchBar = useCallback(() => {
+    setSearchBar((pre) => !pre);
+  }, [setSearchBar]);
+  const onCloseSearchBar = useCallback(() => {
+    setSearchBar(false);
+  }, [setSearchBar]);
+  const onCloseBar = useCallback(() => {
+    setBar(false);
+  }, []);
+  const onBar = useCallback(() => {
+    setBar((prv) => !prv);
+  }, []);
+
   return (
-    <HeaderContainer>
-      <LeftMenu>
-        <FontAwesomeIcon icon={faBowlFood} className="logo" style={{ color: 'green' }} onClick={onHome} />
-        <span>Mountain</span>
-        <MenuContainer>
-          <Menu onClick={onFeed}>피드</Menu>
-          <Menu>한식</Menu>
-          <Menu>일식</Menu>
-          <Menu>양식</Menu>
-          <Menu>중식</Menu>
-        </MenuContainer>
-      </LeftMenu>
-      <Form>
-        <form>
-          <FontAwesomeIcon icon={faSearch} className="formLogo" />
-          <input placeholder="검색" />
-          <FontAwesomeIcon icon={faX} className="formLogo" />
-        </form>
-      </Form>
-      <RightMenu>
-        {me ? (
-          <>
-            <Menu onClick={onMyPage}>마이페이지</Menu>
-            <Menu onClick={onPost}>업로드</Menu>
-            <Menu onClick={onLogout}>로그아웃</Menu>
-          </>
-        ) : (
-          <>
-            <Menu onClick={onLogin}>로그인</Menu>
-            <Menu onClick={onJoin}>회원가입</Menu>
-          </>
-        )}
-        <div className="pos">
-          <FontAwesomeIcon icon={faBagShopping} className="logo" />
-          <SmallBox>1</SmallBox>
-        </div>
-        <FontAwesomeIcon icon={faPaintbrush} className="logo" />
-      </RightMenu>
-    </HeaderContainer>
+    <>
+      <HeaderContainer>
+        <LeftMenu>
+          <FontAwesomeIcon icon={faBowlFood} className="logo" style={{ color: 'green' }} onClick={onHome} />
+          <span>Mountain</span>
+          <MenuContainer>
+            <Menu onClick={onFeed}>피드</Menu>
+            <Menu>한식</Menu>
+            <Menu>일식</Menu>
+            <Menu>양식</Menu>
+            <Menu>중식</Menu>
+          </MenuContainer>
+        </LeftMenu>
+        <Form>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <FontAwesomeIcon icon={faSearch} className="formLogo" />
+            <input placeholder="검색" {...register('search')} />
+            <InputOption id="option" {...register('option')}>
+              <option value="이름">이름</option>
+              <option value="해시태그">해시태그</option>
+            </InputOption>
+            <FontAwesomeIcon icon={faX} className="formLogo" onClick={onRemove} />
+          </form>
+        </Form>
+        <RightMenu>
+          <FontAwesomeIcon icon={faSearch} className="searchLogo" onClick={onSearchBar} />
+          <FontAwesomeIcon icon={faBars} className="barLogo" onClick={onBar} />
+
+          {me ? (
+            <>
+              <Menu onClick={onMyPage}>마이페이지</Menu>
+              <Menu onClick={onPost}>업로드</Menu>
+              <Menu onClick={onLogout}>로그아웃</Menu>
+            </>
+          ) : (
+            <>
+              <Menu onClick={onLogin}>로그인</Menu>
+              <Menu onClick={onJoin}>회원가입</Menu>
+            </>
+          )}
+        </RightMenu>
+      </HeaderContainer>
+      {bar ? <SlideBox onCloseBar={onCloseBar} /> : null}
+      {searchBar ? <Search onCloseSearchBar={onCloseSearchBar} /> : null}
+    </>
   );
 };
 

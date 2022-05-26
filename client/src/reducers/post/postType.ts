@@ -25,6 +25,7 @@ export interface User {
   email: string;
   Image: Image;
 }
+
 export interface Like {
   createdAt: Date;
   updatedAt: Date;
@@ -86,7 +87,23 @@ export interface PostsProps {
 }
 export interface OtherPosts {
   id: number;
-  lastId: number;
+  lastId?: number | null;
+}
+export interface search {
+  title: string;
+  lastId?: number;
+}
+export interface categoryProps {
+  category: string;
+  lastId?: number;
+}
+export interface HashProps {
+  tag: string;
+  lastId?: number;
+}
+export interface updatePost {
+  data: FormData;
+  PostId: number;
 }
 export interface PostState {
   mainPosts: PostsProps[];
@@ -94,11 +111,6 @@ export interface PostState {
   categoryPosts: PostsProps[];
   imagePaths: string[];
   singlePost: PostsProps | null;
-
-  koreaPosts: PostsProps[];
-  japanPosts: PostsProps[];
-  chinaPosts: PostsProps[];
-  euPosts: PostsProps[];
 
   morePosts: boolean;
 
@@ -181,16 +193,24 @@ export interface PostState {
   loadSavePostsLoading: boolean;
   loadSavePostsDone: boolean;
   loadSavePostsError: string | null | unknown;
+
+  searchPostsLoading: boolean;
+  searchPostsDone: boolean;
+  searchPostsError: string | null | unknown;
+
+  loadCategoryPostsLoading: boolean;
+  loadCategoryPostsDone: boolean;
+  loadCategoryPostsError: string | null | unknown;
+
+  updatePostLoading: boolean;
+  updatePostDone: boolean;
+  updatePostError: string | null | unknown;
 }
 
 export const initialState: PostState = {
   mainPosts: [],
   savedPosts: [],
   categoryPosts: [],
-  koreaPosts: [],
-  japanPosts: [],
-  chinaPosts: [],
-  euPosts: [],
 
   imagePaths: [],
   singlePost: null,
@@ -276,4 +296,16 @@ export const initialState: PostState = {
   loadSavePostsLoading: false,
   loadSavePostsDone: false,
   loadSavePostsError: null,
+
+  searchPostsLoading: false,
+  searchPostsDone: false,
+  searchPostsError: null,
+
+  loadCategoryPostsLoading: false,
+  loadCategoryPostsDone: false,
+  loadCategoryPostsError: null,
+
+  updatePostLoading: false,
+  updatePostDone: false,
+  updatePostError: null,
 };

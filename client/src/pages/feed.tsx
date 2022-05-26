@@ -23,7 +23,6 @@ const feed = () => {
       dispatch(loadPostsRequest(lastId));
     }
   }, [inView, morePosts, loadPostsLoading]);
-  console.log(inView, morePosts, !loadPostsLoading);
 
   return (
     <AuthLayout>

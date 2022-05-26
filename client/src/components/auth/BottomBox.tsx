@@ -14,6 +14,14 @@ const SBottomBox = styled(BaseBox)`
     margin-left: 5px;
     color: ${(props) => props.theme.blue};
   }
+  @media (min-width: 768px) and (max-width: 991px) {
+  }
+  @media (max-width: 767px) {
+    font-size: 12px;
+    a {
+      font-size: 9px;
+    }
+  }
 `;
 
 interface IProps {

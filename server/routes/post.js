@@ -2,6 +2,7 @@ const express = require("express");
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
+const { Op, Sequelize } = require("sequelize");
 
 const { Post, Image, User, Comment, Hashtag } = require("../models");
 const { isLoggedIn } = require("./middlewares");
@@ -160,12 +161,13 @@ router.get("/:userId/userposts", async (req, res, next) => {
 
 // POST SEARCH
 router.get("/:search/posts", async (req, res, next) => {
-  // if (parseInt(req.query.lastId, 10)) {
-  //   where.id = { [Op.lt]: parseInt(req.query.lastId, 10) };
-  // }
+  const where = { title: decodeURIComponent(req.params.search) };
+  if (parseInt(req.query.lastId, 10)) {
+    where.id = { [Op.lt]: parseInt(req.query.lastId, 10) };
+  }
   try {
     const posts = await Post.findAll({
-      where: { title: decodeURIComponent(req.params.search) },
+      where,
       limit: 5,
       order: [["createdAt", "DESC"]],
       include: [
@@ -193,8 +195,6 @@ router.get("/:search/posts", async (req, res, next) => {
         },
       ],
     });
-    // console.log(req.params.search),
-    // console.log(decodeURIComponent(req.params.search)),
     res.status(200).json(posts);
   } catch (error) {
     console.error(error);

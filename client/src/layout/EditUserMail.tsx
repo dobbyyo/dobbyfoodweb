@@ -45,7 +45,7 @@ const ImgForm = styled.div`
 
 const MBox = styled.div`
   display: flex;
-  width: 70%;
+  width: 100%;
   justify-content: center;
   align-items: center;
 `;

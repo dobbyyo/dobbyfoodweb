@@ -12,7 +12,6 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin: 0 600px;
 `;
 
 const Img = styled.img`
@@ -25,13 +24,11 @@ const Img = styled.img`
 
 const LongCard: FC<Props> = ({ posts }) => {
   const onClick = useCallback(() => {
-    // console.log(posts.id);
     Router.push(`/post/${posts.id}}`);
   }, []);
 
   return (
     <Container>
-      {/* <Header>{posts.User.nickname}</Header> */}
       {posts.Images[0] && <Img onClick={onClick} src={`http://localhost:3100/${posts.Images[0].src}`} alt="img" />}
     </Container>
   );

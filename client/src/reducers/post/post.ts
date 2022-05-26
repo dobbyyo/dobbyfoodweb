@@ -7,10 +7,10 @@ import {
   CommentSuccess,
   CommentUpdate,
   initialState,
-  Like,
   LikeProps,
   OtherPosts,
   PostsProps,
+  updatePost,
 } from './postType';
 
 export const postSlice = createSlice({
@@ -89,75 +89,6 @@ export const postSlice = createSlice({
       state.loadPostsLoading = false;
       state.loadPostsDone = false;
       state.loadPostsError = action.payload;
-    },
-
-    // 한식 포스터
-    loadKoreaPostsRequest: (state) => {
-      state.loadKoreaPostsLoading = true;
-      state.loadKoreaPostsDone = false;
-      state.loadKoreaPostsError = null;
-    },
-    loadKoreaPostsSuccess: (state, action: PayloadAction<PostsProps>) => {
-      state.loadKoreaPostsLoading = false;
-      state.loadKoreaPostsDone = true;
-      state.loadKoreaPostsError = null;
-      state.koreaPosts = state.koreaPosts.concat(action.payload);
-    },
-    loadKoreaPostsFailure: (state, action: PayloadAction<string | unknown>) => {
-      state.loadKoreaPostsLoading = false;
-      state.loadKoreaPostsDone = false;
-      state.loadKoreaPostsError = action.payload;
-    },
-    // 일식 포스터
-    loadJapanPostsRequest: (state) => {
-      state.loadJapanPostsLoading = true;
-      state.loadJapanPostsDone = false;
-      state.loadJapanPostsError = null;
-    },
-    loadJapanPostsSuccess: (state, action: PayloadAction<PostsProps>) => {
-      state.loadJapanPostsLoading = false;
-      state.loadJapanPostsDone = true;
-      state.loadJapanPostsError = null;
-      state.japanPosts = state.japanPosts.concat(action.payload);
-    },
-    loadJapanPostsFailure: (state, action: PayloadAction<string | unknown>) => {
-      state.loadJapanPostsLoading = false;
-      state.loadJapanPostsDone = false;
-      state.loadJapanPostsError = action.payload;
-    },
-    // 중식 포스터
-    loadChinaPostsRequest: (state) => {
-      state.loadChinaPostsLoading = true;
-      state.loadChinaPostsDone = false;
-      state.loadChinaPostsError = null;
-    },
-    loadChinaPostsSuccess: (state, action: PayloadAction<PostsProps>) => {
-      state.loadChinaPostsLoading = false;
-      state.loadChinaPostsDone = true;
-      state.loadChinaPostsError = null;
-      state.chinaPosts = state.chinaPosts.concat(action.payload);
-    },
-    loadChinaPostsFailure: (state, action: PayloadAction<string | unknown>) => {
-      state.loadChinaPostsLoading = false;
-      state.loadChinaPostsDone = false;
-      state.loadChinaPostsError = action.payload;
-    },
-    // 양식 프소터
-    loadEuPostsRequest: (state) => {
-      state.loadEuPostsLoading = true;
-      state.loadEuPostsDone = false;
-      state.loadEuPostsError = null;
-    },
-    loadEuPostsSuccess: (state, action: PayloadAction<PostsProps>) => {
-      state.loadEuPostsLoading = false;
-      state.loadEuPostsDone = true;
-      state.loadEuPostsError = null;
-      state.euPosts = state.euPosts.concat(action.payload);
-    },
-    loadEuPostsFailure: (state, action: PayloadAction<string | unknown>) => {
-      state.loadEuPostsLoading = false;
-      state.loadEuPostsDone = false;
-      state.loadEuPostsError = action.payload;
     },
 
     // LOAD POST
@@ -326,12 +257,12 @@ export const postSlice = createSlice({
     },
 
     // LOAD OTHER USER POSTS
-    loadOtherUserPostsRequest: (state, _action: PayloadAction<any>) => {
+    loadOtherUserPostsRequest: (state, _action: PayloadAction<OtherPosts>) => {
       state.loadOtherUserPostsLoading = true;
       state.loadOtherUserPostsDone = false;
       state.loadOtherUserPostsError = null;
     },
-    loadOtherUserPostsSuccess: (state, action: PayloadAction<any, any>) => {
+    loadOtherUserPostsSuccess: (state, action: PayloadAction<PostsProps[]>) => {
       state.loadOtherUserPostsLoading = false;
       state.loadOtherUserPostsDone = true;
       state.loadOtherUserPostsError = null;
@@ -363,6 +294,85 @@ export const postSlice = createSlice({
       state.loadSavePostsError = action.payload;
     },
 
+    // SEARCH POSTS
+    searchPostsRequest: (state, _action: PayloadAction<any>) => {
+      state.searchPostsLoading = true;
+      state.searchPostsDone = false;
+      state.searchPostsError = null;
+    },
+    searchPostsSuccess: (state, action: PayloadAction<PostsProps[]>) => {
+      state.searchPostsLoading = false;
+      state.searchPostsDone = true;
+      state.searchPostsError = null;
+      state.mainPosts = state.mainPosts.concat(action.payload);
+      state.morePosts = action.payload.length === 5;
+    },
+    searchPostsFailure: (state, action: PayloadAction<string | unknown>) => {
+      state.searchPostsLoading = false;
+      state.searchPostsDone = false;
+      state.searchPostsError = action.payload;
+    },
+
+    // LOAD CATEGORY POSTS
+    loadCategoryPostsRequest: (state, _action: PayloadAction<any>) => {
+      state.loadCategoryPostsLoading = true;
+      state.loadCategoryPostsDone = false;
+      state.loadCategoryPostsError = null;
+    },
+    loadCategoryPostsSuccess: (state, action: PayloadAction<PostsProps[]>) => {
+      state.loadCategoryPostsLoading = false;
+      state.loadCategoryPostsDone = true;
+      state.loadCategoryPostsError = null;
+      state.categoryPosts = state.categoryPosts.concat(action.payload);
+      state.morePosts = action.payload.length === 5;
+    },
+    loadCategoryPostsFailure: (state, action: PayloadAction<string | unknown>) => {
+      state.loadCategoryPostsLoading = false;
+      state.loadCategoryPostsDone = false;
+      state.loadCategoryPostsError = action.payload;
+    },
+
+    // UPDATE POST
+    updatePostRequest: (state, _action: PayloadAction<updatePost>) => {
+      state.updatePostLoading = true;
+      state.updatePostDone = false;
+      state.updatePostError = null;
+    },
+    updatePostSuccess: (state, action: PayloadAction<PostsProps>) => {
+      console.log(action);
+      state.updatePostLoading = false;
+      state.updatePostDone = true;
+      state.updatePostError = null;
+      state.singlePost = action.payload;
+      if (state.singlePost) {
+        state.singlePost.Images = action.payload.Images;
+      }
+    },
+    updatePostFailure: (state, action: PayloadAction<string | unknown>) => {
+      state.updatePostLoading = false;
+      state.updatePostDone = false;
+      state.updatePostError = action.payload;
+    },
+
+    // GET HASHTAG POSTS
+    loadHashtagPostsRequest: (state, _action: PayloadAction<any>) => {
+      state.loadHashtagPostsLoading = true;
+      state.loadHashtagPostsDone = false;
+      state.loadHashtagPostsError = null;
+    },
+    loadHashtagPostsSuccess: (state, action: PayloadAction<PostsProps[]>) => {
+      state.loadHashtagPostsLoading = false;
+      state.loadHashtagPostsDone = true;
+      state.loadHashtagPostsError = null;
+      state.mainPosts = state.mainPosts.concat(action.payload);
+      state.morePosts = action.payload.length === 5;
+    },
+    loadHashtagPostsFailure: (state, action: PayloadAction<string | unknown>) => {
+      state.loadHashtagPostsLoading = false;
+      state.loadHashtagPostsDone = false;
+      state.loadHashtagPostsError = action.payload;
+    },
+
     // REMOVE IMAGES
     removeImages: (state, action: PayloadAction<number>) => {
       state.imagePaths = state.imagePaths.filter((v, i) => i !== action.payload);
@@ -386,18 +396,6 @@ export const {
   loadPostsSuccess,
   loadPostsRequest,
   loadPostsFailure,
-  loadKoreaPostsRequest,
-  loadKoreaPostsSuccess,
-  loadKoreaPostsFailure,
-  loadJapanPostsRequest,
-  loadJapanPostsSuccess,
-  loadJapanPostsFailure,
-  loadChinaPostsRequest,
-  loadChinaPostsSuccess,
-  loadChinaPostsFailure,
-  loadEuPostsRequest,
-  loadEuPostsSuccess,
-  loadEuPostsFailure,
   loadPostRequest,
   loadPostSuccess,
   loadPostFailure,
@@ -428,6 +426,18 @@ export const {
   loadSavePostsRequest,
   loadSavePostsSuccess,
   loadSavePostsFailure,
+  searchPostsRequest,
+  searchPostsSuccess,
+  searchPostsFailure,
+  loadCategoryPostsRequest,
+  loadCategoryPostsSuccess,
+  loadCategoryPostsFailure,
+  updatePostRequest,
+  updatePostSuccess,
+  updatePostFailure,
+  loadHashtagPostsRequest,
+  loadHashtagPostsSuccess,
+  loadHashtagPostsFailure,
 } = actions;
 
 export default reducer;

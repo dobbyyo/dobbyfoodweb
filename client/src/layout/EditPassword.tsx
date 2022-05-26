@@ -13,7 +13,7 @@ import { logoutRequest, passwordChangeRequest } from '../reducers/user/user';
 
 const MBox = styled.div`
   display: flex;
-  width: 70%;
+  width: 100%;
   justify-content: center;
   align-items: center;
 `;

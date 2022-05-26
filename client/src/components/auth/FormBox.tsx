@@ -17,6 +17,15 @@ const Container = styled(BaseBox)`
       margin-bottom: 12px;
     }
   }
+  @media (min-width: 768px) and (max-width: 991px) {
+    width: 70%;
+  }
+  @media (max-width: 767px) {
+    width: 90%;
+    form {
+      font-size: 12px;
+    }
+  }
 `;
 
 const FormBox: FC = ({ children }) => {

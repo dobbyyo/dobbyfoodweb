@@ -35,6 +35,7 @@ yarn-error.log*
 *.tsbuildinfo
 
 .env
+img
 userImg
 postImg
-img
+postImg

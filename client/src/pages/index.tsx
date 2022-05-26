@@ -12,21 +12,21 @@ import Router from 'next/router';
 
 import wrapper, { SagaStore } from '../store/configureStore';
 import { loadMyInfoRequest } from '../reducers/user/user';
-import {
-  loadChinaPostsRequest,
-  loadEuPostsRequest,
-  loadJapanPostsRequest,
-  loadKoreaPostsRequest,
-  loadPostsRequest,
-} from '../reducers/post/post';
+import { loadPostsRequest } from '../reducers/post/post';
 import { RootState } from '../reducers';
 import AuthLayout from '../components/auth/AuthLayout';
 import LongCard from '../components/auth/LongCard';
 import { PostsProps } from '../reducers/post/postType';
+import RowCards from '../components/auth/RowCards';
 
 const Box = styled.div`
   width: 100%;
   margin-top: 80px;
+  @media (min-width: 768px) and (max-width: 991px) {
+  }
+  @media (max-width: 767px) {
+    /* margin: 0; */
+  }
 `;
 
 const Header = styled.div`
@@ -67,9 +67,9 @@ const HeaderBtn = styled.button`
   width: 80px;
   height: 30px;
   cursor: pointer;
+  margin: 20px 0;
 `;
 const CBoxContainer = styled.div`
-  margin-top: 100px;
   width: 100%;
   display: flex;
   @media (min-width: 768px) and (max-width: 991px) {
@@ -137,7 +137,7 @@ const Home: NextPage = () => {
     dots: false,
     infinite: true,
     speed: 500,
-    slidesToShow: 3,
+    slidesToShow: 1,
     slidesToScroll: 1,
     arrows: false,
     autoplay: true,
@@ -161,17 +161,6 @@ const Home: NextPage = () => {
   }, []);
   return (
     <AuthLayout>
-      <Box>
-        <Header>
-          <h1>피드</h1>
-          <HeaderBtn type="button" onClick={onFeedClick}>
-            더보기
-          </HeaderBtn>
-        </Header>
-        <Slider {...settings}>
-          {mainPosts && mainPosts.map((v: PostsProps) => <LongCard posts={v} key={v.id} />)}
-        </Slider>
-      </Box>
       <CBoxContainer>
         <CBox>
           <SHeader>한식</SHeader>
@@ -227,6 +216,10 @@ const Home: NextPage = () => {
           </Btn>
         </CBox>
       </CBoxContainer>
+      {mainPosts[0] && mainPosts.map((v: PostsProps) => <RowCards posts={v} key={v.id} />)}
+      <HeaderBtn type="button" onClick={onFeedClick}>
+        피드 더보기
+      </HeaderBtn>
     </AuthLayout>
   );
 };
@@ -238,10 +231,6 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async ({
     axios.defaults.headers.common.cookie = cookie;
   }
   store.dispatch(loadPostsRequest(null));
-  store.dispatch(loadKoreaPostsRequest());
-  store.dispatch(loadJapanPostsRequest());
-  store.dispatch(loadChinaPostsRequest());
-  store.dispatch(loadEuPostsRequest());
   store.dispatch(loadMyInfoRequest());
 
   store.dispatch(END);

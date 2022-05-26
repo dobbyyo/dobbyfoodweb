@@ -16,6 +16,7 @@ import { RootState } from '../../reducers';
 import {
   likePostRequest,
   loadPostRequest,
+  removePostRequest,
   removeSavePostRequest,
   savePostRequest,
   unLikePostRequest,
@@ -24,6 +25,8 @@ import { loadMyInfoRequest } from '../../reducers/user/user';
 import wrapper, { SagaStore } from '../../store/configureStore';
 import CommentCard from '../../layout/Comment/CommentCard';
 import { Hashtag, Liker } from '../../reducers/post/postType';
+import useConfirm from '../../components/auth/useConfirm';
+import Edit from '../../layout/Edit';
 
 const Box = styled.div`
   width: 100%;
@@ -31,7 +34,6 @@ const Box = styled.div`
   display: flex;
   margin-top: 50px;
   justify-content: space-between;
-
   height: 100%;
   @media (min-width: 768px) and (max-width: 991px) {
     flex-direction: column;
@@ -140,7 +142,8 @@ const MBtn = styled.button`
   background-color: #000;
   color: #fff;
   cursor: pointer;
-  margin-left: 20px;
+  margin: 0 20px;
+
   @media (min-width: 768px) and (max-width: 991px) {
   }
   @media (max-width: 767px) {
@@ -158,8 +161,6 @@ const LBtn = styled.button`
   @media (min-width: 768px) and (max-width: 991px) {
   }
   @media (max-width: 767px) {
-    /* position: absolute; */
-    /* top: 10%; */
   }
 `;
 
@@ -256,63 +257,98 @@ const Post = () => {
       alert(savePostError);
     }
   }, [savePostError]);
+
+  const [confirmData, setConfirmData] = useState(false);
+  const ok = () => setConfirmData(true);
+  const cancel = () => setConfirmData(false);
+  const confirmDelete = useConfirm('삭제 하시겠습니까?', ok, cancel);
+
+  // eslint-disable-next-line consistent-return
+  useEffect(() => {
+    if (confirmData) {
+      if (id !== singlePost.UserId) {
+        return alert('자신의 글만 삭제할수 있습니다.');
+      }
+      dispatch(removePostRequest(singlePost.id));
+      return Router.back();
+    }
+  }, [confirmData]);
+
+  const [edit, setEdit] = useState(false);
+
+  const onEdit = useCallback(() => {
+    setEdit((cur) => !cur);
+  }, [setEdit]);
+
   return (
     <AuthLayout>
-      <Box>
-        {singlePost.Images && singlePost.Images[0] ? (
-          <CardImgContainer>{singlePost.Images[0] && <CardImg images={singlePost.Images} />}</CardImgContainer>
-        ) : null}
-        <MapBox>
-          <Title onClick={onUser}>
-            {singlePost ? (
-              singlePost.User.Image ? (
-                <Img src={`http://localhost:3100/${singlePost.User.Image.src}`} alt="img" />
-              ) : (
-                <Img src={gravatar.url(me.email, { s: '100%', d: 'retro' })} alt="img" />
-              )
+      {edit ? (
+        <Edit post={singlePost} />
+      ) : (
+        <>
+          <Box>
+            {singlePost.Images && singlePost.Images[0] ? (
+              <CardImgContainer>{singlePost.Images[0] && <CardImg images={singlePost.Images} />}</CardImgContainer>
             ) : null}
-            <h1>{singlePost.User.nickname}</h1>
-          </Title>
-          <Map searchName={singlePost.searchName} activityName={singlePost.activityName} />
-          <Info>
-            <h1>소개</h1>
-            <span>{singlePost.content}</span>
-            <HashtagContainer>
-              {singlePost.Hashtags.map((v: Hashtag) => (
-                <HashtagDiv onClick={onHashtag(v.name)} key={v.id}>
-                  #{v.name}
-                </HashtagDiv>
-              ))}
-            </HashtagContainer>
-          </Info>
-          <BtnContainer>
-            {liked ? (
-              <SBtn type="button" onClick={onUnLike}>
-                <FontAwesomeIcon icon={faHeart} className="icon" style={{ color: 'red', cursor: 'pointer' }} />
-              </SBtn>
-            ) : (
-              <SBtn type="button" onClick={onLike}>
-                <FontAwesomeIcon icon={faHeart} className="icon" style={{ color: 'black', cursor: 'pointer' }} />
-              </SBtn>
-            )}
-            {saved ? (
-              <MBtn onClick={onClickRemoveSave}>
-                <FontAwesomeIcon icon={faBookmark} className="icon" style={{ color: 'red' }} />
-              </MBtn>
-            ) : (
-              <MBtn onClick={onClickSave}>
-                <FontAwesomeIcon icon={faBookmark} className="icon" />
-              </MBtn>
-            )}
-          </BtnContainer>
-        </MapBox>
-      </Box>
-      <CommentBox>
-        <LBtn type="button" onClick={onComment}>
-          {commentBar ? '댓글 닫기' : '댓글 보기'}
-        </LBtn>
-        {commentBar && <CommentCard comments={singlePost.Comments} />}
-      </CommentBox>
+            <MapBox>
+              <Title onClick={onUser}>
+                {singlePost && me ? (
+                  singlePost.User.Image ? (
+                    <Img src={`http://localhost:3100/${singlePost.User.Image.src}`} alt="img" />
+                  ) : (
+                    <Img src={gravatar.url(me.email, { s: '100%', d: 'retro' })} alt="img" />
+                  )
+                ) : null}
+                <h1>{singlePost.User.nickname}</h1>
+              </Title>
+              <Map searchName={singlePost.searchName} activityName={singlePost.activityName} />
+              <Info>
+                <h1>소개</h1>
+                <span>{singlePost.content}</span>
+                <HashtagContainer>
+                  {singlePost.Hashtags.map((v: Hashtag) => (
+                    <HashtagDiv onClick={onHashtag(v.name)} key={v.id}>
+                      #{v.name}
+                    </HashtagDiv>
+                  ))}
+                </HashtagContainer>
+              </Info>
+              <BtnContainer>
+                {liked ? (
+                  <SBtn type="button" onClick={onUnLike}>
+                    <FontAwesomeIcon icon={faHeart} className="icon" style={{ color: 'red', cursor: 'pointer' }} />
+                  </SBtn>
+                ) : (
+                  <SBtn type="button" onClick={onLike}>
+                    <FontAwesomeIcon icon={faHeart} className="icon" style={{ color: 'black', cursor: 'pointer' }} />
+                  </SBtn>
+                )}
+                {saved ? (
+                  <MBtn onClick={onClickRemoveSave}>
+                    <FontAwesomeIcon icon={faBookmark} className="icon" style={{ color: 'red' }} />
+                  </MBtn>
+                ) : (
+                  <MBtn onClick={onClickSave}>
+                    <FontAwesomeIcon icon={faBookmark} className="icon" />
+                  </MBtn>
+                )}
+                {me && me.id === singlePost.UserId ? (
+                  <>
+                    <MBtn onClick={onEdit}>수정</MBtn>
+                    <SBtn onClick={confirmDelete}>삭제</SBtn>
+                  </>
+                ) : null}
+              </BtnContainer>
+            </MapBox>
+          </Box>
+          <CommentBox>
+            <LBtn type="button" onClick={onComment}>
+              {commentBar ? '댓글 닫기' : '댓글 보기'}
+            </LBtn>
+            {commentBar && <CommentCard comments={singlePost.Comments} />}
+          </CommentBox>
+        </>
+      )}
     </AuthLayout>
   );
 };

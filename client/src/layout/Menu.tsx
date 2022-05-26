@@ -11,7 +11,6 @@ import { followRequest, unFollowRequest } from '../reducers/user/user';
 const MenuContainer = styled.div`
   width: 20%;
   height: 100%;
-  background-color: red;
   @media (min-width: 768px) and (max-width: 991px) {
     display: none;
   }
@@ -80,6 +79,7 @@ interface Props {
 }
 const Menu: FC<Props> = ({ userInfo, onEditUser, onMyInfo, onPassword, onDelete }) => {
   const { me } = useSelector((state: RootState) => state.user);
+  const id = useSelector((state: RootState) => state.user.me?.id);
 
   const [userOk, setUserOk] = useState(false);
 
@@ -125,23 +125,29 @@ const Menu: FC<Props> = ({ userInfo, onEditUser, onMyInfo, onPassword, onDelete 
           </Btn>
         )}
       </NicknameDiv>
-      <Box>
-        <Ul>
-          <Title>나의 활동</Title>
-          <Li onClick={onMyInfo}>찜</Li>
-          <Li>북마크</Li>
-          <Li>팔로워</Li>
-          <Li>팔로잉</Li>
-        </Ul>
-        <Ul>
-          <Title>회원정보</Title>
-          <Li onClick={onEditUser}>이메일 변경</Li>
-          <Li onClick={onPassword}>비밀번호 변경</Li>
-          <Li onClick={onDelete}>회원탈퇴</Li>
-        </Ul>
-      </Box>
+      {userInfo.id === id ? (
+        <Box>
+          <Ul>
+            <Title>나의 활동</Title>
+            <Li onClick={onMyInfo}>찜</Li>
+            <Li>북마크</Li>
+            <Li>팔로워</Li>
+            <Li>팔로잉</Li>
+          </Ul>
+          <Ul>
+            <Title>회원정보</Title>
+            <Li onClick={onEditUser}>이메일 변경</Li>
+            <Li onClick={onPassword}>비밀번호 변경</Li>
+            <Li onClick={onDelete}>회원탈퇴</Li>
+          </Ul>
+        </Box>
+      ) : null}
 
-      <Btn type="button">로그아웃</Btn>
+      {id && (
+        <div style={{ marginTop: '20px' }}>
+          <Btn type="button">로그아웃</Btn>
+        </div>
+      )}
     </MenuContainer>
   );
 };

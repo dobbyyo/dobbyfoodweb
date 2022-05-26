@@ -15,18 +15,12 @@ import {
   likePostFailure,
   likePostRequest,
   likePostSuccess,
-  loadChinaPostsFailure,
-  loadChinaPostsRequest,
-  loadChinaPostsSuccess,
-  loadEuPostsFailure,
-  loadEuPostsRequest,
-  loadEuPostsSuccess,
-  loadJapanPostsFailure,
-  loadJapanPostsRequest,
-  loadJapanPostsSuccess,
-  loadKoreaPostsFailure,
-  loadKoreaPostsRequest,
-  loadKoreaPostsSuccess,
+  loadCategoryPostsFailure,
+  loadCategoryPostsRequest,
+  loadCategoryPostsSuccess,
+  loadHashtagPostsFailure,
+  loadHashtagPostsRequest,
+  loadHashtagPostsSuccess,
   loadOtherUserPostsFailure,
   loadOtherUserPostsRequest,
   loadOtherUserPostsSuccess,
@@ -51,14 +45,20 @@ import {
   savePostFailure,
   savePostRequest,
   savePostSuccess,
+  searchPostsFailure,
+  searchPostsRequest,
+  searchPostsSuccess,
   unLikePostFailure,
   unLikePostRequest,
   unLikePostSuccess,
   updateCommentFailure,
   updateCommentRequest,
   updateCommentSuccess,
+  updatePostFailure,
+  updatePostRequest,
+  updatePostSuccess,
 } from '../../reducers/post/post';
-import { CommentProps, OtherPosts } from '../../reducers/post/postType';
+import { categoryProps, CommentProps, HashProps, OtherPosts, search } from '../../reducers/post/postType';
 import { addPostToMe, removePostToMe } from '../../reducers/user/user';
 
 // ADD POST
@@ -145,90 +145,6 @@ function* loadPosts(action: PayloadAction<number>) {
 
 function* sagaLoadPosts() {
   yield takeLatest(loadPostsRequest.type, loadPosts);
-}
-
-// 한식 포스터
-async function loadKoreaPostsAPI() {
-  const res = await axios.get('/posts/korea');
-  return res;
-}
-
-function* loadKoreaPosts() {
-  try {
-    const result: AxiosResponse = yield call(loadKoreaPostsAPI);
-    yield put(loadKoreaPostsSuccess(result.data));
-  } catch (error) {
-    const err = error as AxiosError;
-    console.error(err);
-    yield put(loadKoreaPostsFailure(err.response?.data));
-  }
-}
-
-function* sagaLoadKoreaPosts() {
-  yield takeLatest(loadKoreaPostsRequest.type, loadKoreaPosts);
-}
-
-// 일식 포스터
-async function loadJapanPostsAPI() {
-  const res = await axios.get('/posts/japan');
-  return res;
-}
-
-function* loadJapanPosts() {
-  try {
-    const result: AxiosResponse = yield call(loadJapanPostsAPI);
-    yield put(loadJapanPostsSuccess(result.data));
-  } catch (error) {
-    const err = error as AxiosError;
-    console.error(err);
-    yield put(loadJapanPostsFailure(err.response?.data));
-  }
-}
-
-function* sagaLoadJapanPosts() {
-  yield takeLatest(loadJapanPostsRequest.type, loadJapanPosts);
-}
-
-// 중식 포스터
-async function loadChinaPostsAPI() {
-  const res = await axios.get('posts/china');
-  return res;
-}
-
-function* loadChinaPosts() {
-  try {
-    const result: AxiosResponse = yield call(loadChinaPostsAPI);
-    yield put(loadChinaPostsSuccess(result.data));
-  } catch (error) {
-    const err = error as AxiosError;
-    console.error(err);
-    yield put(loadChinaPostsFailure(err.response?.data));
-  }
-}
-
-function* sagaLoadChinaPosts() {
-  yield takeLatest(loadChinaPostsRequest.type, loadChinaPosts);
-}
-
-// 양식 포스터
-async function loadEuPostsAPI() {
-  const res = await axios.get('posts/eu');
-  return res;
-}
-
-function* loadEuPosts() {
-  try {
-    const result: AxiosResponse = yield call(loadEuPostsAPI);
-    yield put(loadEuPostsSuccess(result.data));
-  } catch (error) {
-    const err = error as AxiosError;
-    console.error(err);
-    yield put(loadEuPostsFailure(err.response?.data));
-  }
-}
-
-function* sagaLoadEuPosts() {
-  yield takeLatest(loadEuPostsRequest.type, loadEuPosts);
 }
 
 // LOAD POST
@@ -402,15 +318,15 @@ function* sagaRemoveSavePost() {
 }
 
 // LOAD OTHER USER POSTS
-async function loadOtherUserPostsAPI(data: any, lastId: any) {
+async function loadOtherUserPostsAPI(data: OtherPosts) {
   console.log(data);
-  const res = await axios.get(`/post/${data}/userposts?lastId=${lastId || 0}`);
+  const res = await axios.get(`/post/${data.id}/userposts?lastId=${data.lastId || 0}`);
   return res;
 }
 
-function* loadOtherUserPosts(action: PayloadAction<any>) {
+function* loadOtherUserPosts(action: PayloadAction<OtherPosts>) {
   try {
-    const result: AxiosResponse = yield call(loadOtherUserPostsAPI, action.payload, action.payload.lastId);
+    const result: AxiosResponse = yield call(loadOtherUserPostsAPI, action.payload);
     yield put(loadOtherUserPostsSuccess(result.data));
   } catch (error) {
     const err = error as AxiosError;
@@ -444,16 +360,100 @@ function* sagaLoadSavePosts() {
   yield takeLatest(loadSavePostsRequest.type, loadSavePosts);
 }
 
+// SEARCH POSTS
+async function searchPostsAPI(data: search) {
+  const res = await axios.get(`/post/${encodeURIComponent(data.title)}/posts?lastId=${data.lastId || 0}`);
+  return res;
+}
+
+function* searchPosts(action: PayloadAction<search>) {
+  try {
+    const result: AxiosResponse = yield call(searchPostsAPI, action.payload);
+    yield put(searchPostsSuccess(result.data));
+  } catch (error) {
+    const err = error as AxiosError;
+    console.error(err);
+    yield put(searchPostsFailure(err.response?.data));
+  }
+}
+
+function* sagaSearchPosts() {
+  yield takeLatest(searchPostsRequest.type, searchPosts);
+}
+
+// LOAD CATEGORY POSTS
+async function loadCategoryPostsAPI(data: categoryProps) {
+  console.log(data);
+  const res = await axios.get(`/posts/${encodeURIComponent(data.category)}/all?lastId=${data.lastId || 0}`);
+  console.log(res);
+  return res;
+}
+
+function* loadCategoryPosts(action: PayloadAction<categoryProps>) {
+  try {
+    const result: AxiosResponse = yield call(loadCategoryPostsAPI, action.payload);
+    yield put(loadCategoryPostsSuccess(result.data));
+  } catch (error) {
+    const err = error as AxiosError;
+    console.error(err);
+    yield put(loadCategoryPostsFailure(err.response?.data));
+  }
+}
+
+function* sagaLoadCategoryPosts() {
+  yield takeLatest(loadCategoryPostsRequest.type, loadCategoryPosts);
+}
+
+// LOAD HASHTAG POSTS GET
+async function loadHashtagPostsAPI(data: HashProps) {
+  console.log(data);
+  const res = await axios.get(`/hashtag/${encodeURIComponent(data.tag)}?lastId=${data.lastId || 0}`);
+  return res;
+}
+
+function* loadHashtagPosts(action: PayloadAction<HashProps>) {
+  try {
+    const result: AxiosResponse = yield call(loadHashtagPostsAPI, action.payload);
+    yield put(loadHashtagPostsSuccess(result.data));
+  } catch (error) {
+    const err = error as AxiosError;
+    console.error(err);
+    yield put(loadHashtagPostsFailure(err.response?.data));
+  }
+}
+
+function* sagaLoadHashtagPosts() {
+  yield takeLatest(loadHashtagPostsRequest.type, loadHashtagPosts);
+}
+
+// UPDATE POST
+async function updatePostAPI(data: any) {
+  const res = await axios.patch(`/post/${data.PostId}`, data.data);
+  console.log(data);
+  return res;
+}
+
+function* updatePost(action: PayloadAction<FormData>) {
+  try {
+    const result: AxiosResponse = yield call(updatePostAPI, action.payload);
+    yield put(updatePostSuccess(result.data));
+  } catch (error) {
+    const err = error as AxiosError;
+    console.error(err);
+    yield put(updatePostFailure(err.response?.data));
+  }
+}
+
+function* sagaUpdatePost() {
+  yield takeLatest(updatePostRequest.type, updatePost);
+}
+
 export default function* postSaga() {
   yield all([
     fork(sagaAddPost),
     fork(sagaRemovePost),
     fork(sagaAddImages),
     fork(sagaLoadPosts),
-    fork(sagaLoadKoreaPosts),
-    fork(sagaLoadJapanPosts),
-    fork(sagaLoadChinaPosts),
-    fork(sagaLoadEuPosts),
     fork(sagaLoadPost),
     fork(sagaLikePost),
     fork(sagaUnLikePost),
@@ -464,5 +464,9 @@ export default function* postSaga() {
     fork(sagaRemoveSavePost),
     fork(sagaLoadOtherUserPosts),
     fork(sagaLoadSavePosts),
+    fork(sagaSearchPosts),
+    fork(sagaLoadCategoryPosts),
+    fork(sagaUpdatePost),
+    fork(sagaLoadHashtagPosts),
   ]);
 }

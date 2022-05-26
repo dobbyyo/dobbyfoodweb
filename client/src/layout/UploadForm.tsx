@@ -90,9 +90,6 @@ const UploadForm = () => {
   const dataPlace = useCallback((data) => {
     setPlace(data);
   }, []);
-  const onCloseModal = useCallback(() => {
-    setModal(false);
-  }, []);
 
   const [pageNumber, setPageNumber] = useState(0);
   const onFrontPage = useCallback(() => {
@@ -138,7 +135,6 @@ const UploadForm = () => {
   const onSubmit = useCallback(() => {
     const { title, content, hashtag, activityName, searchName, kinds } = getValues();
 
-    console.log(title, content, hashtag, activityName, searchName, kinds);
     if (kinds === 'none') {
       return alert('종류를 선택해주세요!');
     }
@@ -156,7 +152,6 @@ const UploadForm = () => {
     return Router.back();
   }, [getValues, imagePaths]);
 
-  console.log(place);
   return (
     <AuthLayout>
       <FormBox>

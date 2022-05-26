@@ -2,7 +2,6 @@
 import React, { FC, useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useInView } from 'react-intersection-observer';
-
 import styled from 'styled-components';
 import RowCards from '../components/auth/RowCards';
 import { RootState } from '../reducers';
@@ -11,6 +10,7 @@ import { PostsProps } from '../reducers/post/postType';
 import { loadOtherUserInfoRequest } from '../reducers/user/user';
 import { OtherUserInfo } from '../reducers/user/userTypes';
 import { loadOtherUserPostsRequest } from '../reducers/post/post';
+import FollowBox from './FollowBox';
 
 const Container = styled.div`
   width: 100%;
@@ -43,6 +43,7 @@ const Post = styled.div`
   align-items: center;
   justify-content: center;
 `;
+
 const SH1 = styled.h1<{ follow: boolean }>`
   color: ${(props) => (props.follow ? 'red' : 'black')};
 `;
@@ -53,25 +54,22 @@ interface Props {
 
 const MyInfo: FC<Props> = ({ UserInfo }) => {
   const { mainPosts, morePosts, savedPosts, loadOtherUserPostsLoading } = useSelector((state: RootState) => state.post);
-  const { followDone, unFollowDone } = useSelector((state: RootState) => state.user);
+  const { followDone, unFollowDone, Followings, Followers } = useSelector((state: RootState) => state.user);
   const [ref, inView] = useInView();
 
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    if (inView && morePosts && !loadOtherUserPostsLoading) {
-      const lastId = mainPosts[mainPosts.length - 1]?.id;
-      console.log(lastId);
-      dispatch(loadOtherUserPostsRequest(lastId));
-    }
-  }, [inView, morePosts, loadOtherUserPostsLoading]);
-
-  console.log(morePosts);
-
   const [followersBar, setFollowersBar] = useState(false);
   const [followingsBar, setFollowingsBar] = useState(false);
   const [postsBar, setPostsBar] = useState(true);
   const [savedPostsBar, setSavedPostsBar] = useState(false);
+
+  useEffect(() => {
+    if (inView && morePosts && !loadOtherUserPostsLoading && postsBar) {
+      const lastId = mainPosts[mainPosts.length - 1]?.id;
+      const data = { id: UserInfo.id, lastId };
+      dispatch(loadOtherUserPostsRequest(data));
+    }
+  }, [inView, morePosts, loadOtherUserPostsLoading]);
 
   const onFollowers = useCallback(() => {
     setFollowersBar(true);
@@ -143,6 +141,7 @@ const MyInfo: FC<Props> = ({ UserInfo }) => {
           : null}
         <div ref={morePosts && !loadOtherUserPostsLoading ? ref : undefined} style={{ margin: '30px' }} />
       </Post>
+      {followBar && <FollowBox Followings={Followings} Followers={Followers} followersBar={followersBar} />}
     </Container>
   );
 };
