@@ -196,6 +196,19 @@ const Header = () => {
     setBar((prv) => !prv);
   }, []);
 
+  const onKorea = useCallback(() => {
+    Router.push('/category/한식');
+  }, []);
+  const onJapan = useCallback(() => {
+    Router.push('/category/일식');
+  }, []);
+  const onChian = useCallback(() => {
+    Router.push('/category/중식');
+  }, []);
+  const onEu = useCallback(() => {
+    Router.push('/category/양식');
+  }, []);
+
   return (
     <>
       <HeaderContainer>
@@ -204,10 +217,10 @@ const Header = () => {
           <span>Mountain</span>
           <MenuContainer>
             <Menu onClick={onFeed}>피드</Menu>
-            <Menu>한식</Menu>
-            <Menu>일식</Menu>
-            <Menu>양식</Menu>
-            <Menu>중식</Menu>
+            <Menu onClick={onKorea}>한식</Menu>
+            <Menu onClick={onJapan}>일식</Menu>
+            <Menu onClick={onEu}>양식</Menu>
+            <Menu onClick={onChian}>중식</Menu>
           </MenuContainer>
         </LeftMenu>
         <Form>

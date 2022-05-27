@@ -7,8 +7,6 @@ import { BaseBox } from '../shared/shared';
 const SBottomBox = styled(BaseBox)`
   padding: 20px 0px;
   text-align: center;
-  /* width: 100%; */
-  /* background-color: red; */
   a {
     font-weight: 600;
     margin-left: 5px;

@@ -8,10 +8,6 @@ const Box = styled.div`
   justify-content: space-around;
   background-color: #e5e5e5;
   margin-top: 20px;
-  h1 {
-    margin: 30px 20px;
-    cursor: pointer;
-  }
   @media (min-width: 1200px) {
     position: fixed;
     height: 400px;
@@ -21,6 +17,10 @@ const Box = styled.div`
     font-size: 22px;
     margin-top: 0;
   }
+`;
+const H1 = styled.h1`
+  margin: 30px 20px;
+  cursor: pointer;
 `;
 
 interface Props {
@@ -46,18 +46,10 @@ const Sbox: FC<Props> = ({ onCloseBar }) => {
   }, []);
   return (
     <Box>
-      <h1 onClick={onJapan} aria-hidden="true">
-        양식
-      </h1>
-      <h1 onClick={onChina} aria-hidden="true">
-        중식
-      </h1>
-      <h1 onClick={onEurope} aria-hidden="true">
-        일신
-      </h1>
-      <h1 onClick={onKorea} aria-hidden="true">
-        한식
-      </h1>
+      <H1 onClick={onJapan}>양식</H1>
+      <H1 onClick={onChina}>중식</H1>
+      <H1 onClick={onEurope}>일신</H1>
+      <H1 onClick={onKorea}>한식</H1>
     </Box>
   );
 };

@@ -5,7 +5,6 @@ import axios from 'axios';
 import { END } from 'redux-saga';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import Router from 'next/router';
@@ -15,34 +14,9 @@ import { loadMyInfoRequest } from '../reducers/user/user';
 import { loadPostsRequest } from '../reducers/post/post';
 import { RootState } from '../reducers';
 import AuthLayout from '../components/auth/AuthLayout';
-import LongCard from '../components/auth/LongCard';
 import { PostsProps } from '../reducers/post/postType';
 import RowCards from '../components/auth/RowCards';
 
-const Box = styled.div`
-  width: 100%;
-  margin-top: 80px;
-  @media (min-width: 768px) and (max-width: 991px) {
-  }
-  @media (max-width: 767px) {
-    /* margin: 0; */
-  }
-`;
-
-const Header = styled.div`
-  width: 100%;
-  color: #000;
-  display: flex;
-  align-items: center;
-  justify-content: right;
-  margin-bottom: 20px;
-  margin-top: 30px;
-  h1 {
-    font-size: 20px;
-    margin-right: 10px;
-    font-weight: 700;
-  }
-`;
 const Btn = styled.button`
   /* margin: 0 20px; */
   background-color: #fff;
@@ -133,16 +107,7 @@ const Info = styled.div`
 
 const Home: NextPage = () => {
   const { mainPosts } = useSelector((state: RootState) => state.post);
-  const settings = {
-    dots: false,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    arrows: false,
-    autoplay: true,
-    autoplaySpeed: 2000,
-  };
+
   const onFeedClick = useCallback(() => {
     Router.push('/feed');
   }, []);
