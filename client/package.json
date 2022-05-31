@@ -23,6 +23,7 @@
     "gravatar": "^1.8.2",
     "next": "12.1.4",
     "next-redux-wrapper": "^7.0.5",
+    "pm2": "^5.2.0",
     "react": "18.0.0",
     "react-daum-postcode": "^3.0.3",
     "react-dom": "18.0.0",

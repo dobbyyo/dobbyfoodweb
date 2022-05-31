@@ -1,6 +1,7 @@
 import Router from 'next/router';
 import React, { FC, useCallback } from 'react';
 import styled from 'styled-components';
+import backUrl from '../../config/config';
 import { PostsProps } from '../../reducers/post/postType';
 
 interface Props {
@@ -29,7 +30,7 @@ const LongCard: FC<Props> = ({ posts }) => {
 
   return (
     <Container>
-      {posts.Images[0] && <Img onClick={onClick} src={`http://localhost:3100/${posts.Images[0].src}`} alt="img" />}
+      {posts.Images[0] && <Img onClick={onClick} src={`${backUrl}/${posts.Images[0].src}`} alt="img" />}
     </Container>
   );
 };

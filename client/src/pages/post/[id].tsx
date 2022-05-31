@@ -27,6 +27,7 @@ import CommentCard from '../../layout/Comment/CommentCard';
 import { Hashtag, Liker } from '../../reducers/post/postType';
 import useConfirm from '../../components/auth/useConfirm';
 import Edit from '../../layout/Edit';
+import backUrl from '../../config/config';
 
 const Box = styled.div`
   width: 100%;
@@ -294,7 +295,7 @@ const Post = () => {
               <Title onClick={onUser}>
                 {singlePost && me ? (
                   singlePost.User.Image ? (
-                    <Img src={`http://localhost:3100/${singlePost.User.Image.src}`} alt="img" />
+                    <Img src={`${backUrl}/${singlePost.User.Image.src}`} alt="img" />
                   ) : (
                     <Img src={gravatar.url(me.email, { s: '100%', d: 'retro' })} alt="img" />
                   )
