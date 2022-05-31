@@ -6,6 +6,8 @@ const cookieParser = require("cookie-parser");
 const passport = require("passport");
 const dotenv = require("dotenv");
 const path = require("path");
+const hpp = require("hpp");
+const helmet = require("helmet");
 
 const db = require("./models");
 const passportConfig = require("./passport");
@@ -26,10 +28,16 @@ db.sequelize
 
 passportConfig();
 
-app.use(morgan("dev"));
+if (process.env.NODE_ENV === "production") {
+  app.use(morgan("combined"));
+  app.use(hpp());
+  app.use(helmet({ contentSecurityPolicy: false }));
+} else {
+  app.use(morgan("dev"));
+}
 app.use(
   cors({
-    origin: true,
+    origin: ["http://localhost:3100", "foodweb.com"],
     credentials: true,
   })
 );
