@@ -6,6 +6,9 @@ const path = require("path");
 const fs = require("fs");
 const { Op } = require("sequelize");
 
+const multerS3 = require("multer-s3");
+const AWS = require("aws-sdk");
+
 const { User, Post, Image, Comment } = require("../models");
 const { isLoggedIn, isNotLoggedIn } = require("./middlewares");
 
@@ -19,16 +22,11 @@ try {
 }
 
 const upload = multer({
-  storage: multer.diskStorage({
-    destination(req, file, done) {
-      done(null, "userImg");
-    },
-    filename(req, file, done) {
-      const extend = path.extname(file.originalname);
-
-      const basename = path.basename(file.originalname, extend);
-
-      done(null, basename + "_" + new Date().getTime() + extend);
+  storage: multerS3({
+    s3: new AWS.S3(),
+    bucket: "foodweb-aws",
+    key(req, file, cb) {
+      cb(null, `original/${Date.now()}_${path.basename(file.originalname)}`);
     },
   }),
   limits: { fileSize: 20 * 1024 * 1024 },
@@ -80,7 +78,7 @@ router.post(
   upload.single("image"),
   async (req, res, next) => {
     console.log(req.files);
-    res.json(req.file.filename);
+    res.json(req.file.location);
   }
 );
 
