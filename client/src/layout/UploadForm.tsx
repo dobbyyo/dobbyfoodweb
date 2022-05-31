@@ -9,7 +9,6 @@ import FormBox from '../components/auth/FormBox';
 import FormError from '../components/auth/FormError';
 import Modal from '../components/auth/Modal';
 import { Button, Input, Select } from '../components/shared/shared';
-import backUrl from '../config/config';
 import { RootState } from '../reducers';
 import { addImagesRequest, addPostRequest, removeImages } from '../reducers/post/post';
 
@@ -228,7 +227,7 @@ const UploadForm = () => {
               <ImgForm className="uploadImg">
                 {imagePaths.map((v: string, i: number) => (
                   <div key={v}>
-                    <img src={`${backUrl}/${v}`} style={{ width: '200px' }} alt="img" />
+                    <img src={v} style={{ width: '200px' }} alt="img" />
                     <div>
                       <button type="button" onClick={onRemoveImage(i)}>
                         제거

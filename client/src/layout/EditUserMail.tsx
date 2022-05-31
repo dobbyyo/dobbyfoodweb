@@ -6,7 +6,6 @@ import styled from 'styled-components';
 import FormBox from '../components/auth/FormBox';
 import FormError from '../components/auth/FormError';
 import { Button, Input } from '../components/shared/shared';
-import backUrl from '../config/config';
 import { RootState } from '../reducers';
 
 import { removeImage, userChangeRequest, userImageRequest } from '../reducers/user/user';
@@ -147,7 +146,7 @@ const EditUser: FC<Props> = ({ onCloseEditUser }) => {
             <ImgForm className="uploadImg">
               {imagePaths.map((v: string) => (
                 <div key={v}>
-                  <img src={`${backUrl}/${v}`} style={{ width: '200px' }} alt="img" />
+                  <img src={v} style={{ width: '200px' }} alt="img" />
                   <div>
                     <button type="button" onClick={onRemoveImage()}>
                       제거

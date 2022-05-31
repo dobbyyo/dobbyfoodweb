@@ -1,7 +1,6 @@
 import Router from 'next/router';
 import React, { FC, useCallback } from 'react';
 import styled from 'styled-components';
-import backUrl from '../../config/config';
 import { PostsProps } from '../../reducers/post/postType';
 
 interface Props {
@@ -28,11 +27,7 @@ const LongCard: FC<Props> = ({ posts }) => {
     Router.push(`/post/${posts.id}}`);
   }, []);
 
-  return (
-    <Container>
-      {posts.Images[0] && <Img onClick={onClick} src={`${backUrl}/${posts.Images[0].src}`} alt="img" />}
-    </Container>
-  );
+  return <Container>{posts.Images[0] && <Img onClick={onClick} src={`${posts.Images[0].src}`} alt="img" />}</Container>;
 };
 
 export default LongCard;

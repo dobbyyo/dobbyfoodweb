@@ -8,7 +8,6 @@ import FormError from '../components/auth/FormError';
 import Modal from '../components/auth/Modal';
 
 import { Button, FatLink, Input, Select } from '../components/shared/shared';
-import backUrl from '../config/config';
 import { RootState } from '../reducers';
 import { addImagesRequest, removeImages, updatePostRequest } from '../reducers/post/post';
 import { PostsProps } from '../reducers/post/postType';
@@ -191,7 +190,7 @@ const Edit: FC<Props> = ({ post }) => {
         <ImgForm className="uploadImg">
           {imagePaths.map((v: string, i: number) => (
             <div key={v}>
-              <img src={`${backUrl}/${v}`} style={{ width: '200px' }} alt="img" />
+              <img src={v} style={{ width: '200px' }} alt="img" />
               <div>
                 <button type="button" onClick={onRemoveImage(i)}>
                   제거

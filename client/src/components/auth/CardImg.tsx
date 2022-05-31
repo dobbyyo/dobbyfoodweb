@@ -4,7 +4,6 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import styled from 'styled-components';
 import { Image } from '../../reducers/post/postType';
-import backUrl from '../../config/config';
 
 const ImgContainer = styled.div`
   width: 100%;
@@ -39,7 +38,7 @@ const CardImg: FC<Props> = ({ images }) => {
     <ImgContainer>
       <Slider {...settings}>
         {images.map((img: Image, i: number) => (
-          <Img key={img.id} src={`${backUrl}/${images[i].src}`} />
+          <Img key={img.id} src={`${images[i].src}`} />
         ))}
       </Slider>
     </ImgContainer>

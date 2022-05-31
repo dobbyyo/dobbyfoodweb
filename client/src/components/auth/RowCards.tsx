@@ -11,7 +11,6 @@ import { Hashtag, PostsProps } from '../../reducers/post/postType';
 import CardImg from './CardImg';
 import { RootState } from '../../reducers';
 import { likePostRequest, unLikePostRequest } from '../../reducers/post/post';
-import backUrl from '../../config/config';
 
 interface Props {
   posts: PostsProps;
@@ -160,7 +159,7 @@ const RowCards: FC<Props> = ({ posts }) => {
     <Container>
       <UserName onClick={onUser(posts.UserId)}>
         {posts.User.Image ? (
-          <Img src={`${backUrl}/${posts.User.Image.src}`} alt="img" />
+          <Img src={`${posts.User.Image.src}`} alt="img" />
         ) : (
           <Img src={gravatar.url(posts.User.email, { s: '100%', d: 'retro' })} alt="img" />
         )}

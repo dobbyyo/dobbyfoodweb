@@ -16,7 +16,6 @@ import { RootState } from '../reducers';
 import AuthLayout from '../components/auth/AuthLayout';
 import { PostsProps } from '../reducers/post/postType';
 import RowCards from '../components/auth/RowCards';
-import backUrl from '../config/config';
 
 const Btn = styled.button`
   /* margin: 0 20px; */
@@ -130,7 +129,7 @@ const Home: NextPage = () => {
       <CBoxContainer>
         <CBox>
           <SHeader>한식</SHeader>
-          <Img src={`${backUrl}/bibimbap.jpg`} alt="img" />
+          <Img src="bibimbap.jpg" alt="img" />
           <Info>
             <h1>비빔밥</h1>
             <span>
@@ -144,7 +143,7 @@ const Home: NextPage = () => {
         </CBox>
         <CBox>
           <SHeader>일식</SHeader>
-          <Img src={`${backUrl}/ramen.jpg`} alt="img" />
+          <Img src="ramen.jpg" alt="img" />
           <Info>
             <h1>라맨</h1>
             <span>라멘(일본어: ラーメン)은 일본식 중화 국수 요리이다. 일본의 국민 음식 가운데 하나로 여겨진다.</span>
@@ -155,7 +154,7 @@ const Home: NextPage = () => {
         </CBox>
         <CBox>
           <SHeader>중식</SHeader>
-          <Img src={`${backUrl}/jajangmyeon.jpg`} alt="img" />
+          <Img src="jajangmyeon.jpg" alt="img" />
           <Info>
             <h1>짜장면</h1>
             <span>
@@ -169,7 +168,7 @@ const Home: NextPage = () => {
         </CBox>
         <CBox>
           <SHeader>양식</SHeader>
-          <Img src={`${backUrl}/pasta.jpg`} alt="img" />
+          <Img src="pasta.jpg" alt="img" />
           <Info>
             <h1>파스타</h1>
             <span>

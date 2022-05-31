@@ -7,7 +7,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { OtherUserInfo } from '../reducers/user/userTypes';
 import { RootState } from '../reducers';
 import { followRequest, unFollowRequest } from '../reducers/user/user';
-import backUrl from '../config/config';
 
 const MenuContainer = styled.div`
   width: 20%;
@@ -113,7 +112,7 @@ const Menu: FC<Props> = ({ userInfo, onEditUser, onMyInfo, onPassword, onDelete 
         <div className="AvatarIcon">
           {userInfo ? (
             userInfo.Image ? (
-              <Img src={`${backUrl}/${userInfo.Image.src}`} alt="img" />
+              <Img src={`${userInfo.Image.src}`} alt="img" />
             ) : (
               <Img src={gravatar.url(userInfo.email, { s: '100%', d: 'retro' })} alt="img" />
             )

@@ -3,7 +3,6 @@ import gravatar from 'gravatar';
 import styled from 'styled-components';
 import Router from 'next/router';
 import { Follow } from '../../reducers/user/userTypes';
-import backUrl from '../../config/config';
 
 interface Props {
   data: Follow;
@@ -48,7 +47,7 @@ const SmallCard: FC<Props> = ({ data }) => {
   return (
     <Box onClick={onClick(data.id)}>
       {data && data.Image ? (
-        <Img src={`${backUrl}/${data.Image.src}`} alt="img" />
+        <Img src={`${data.Image.src}`} alt="img" />
       ) : (
         <Img src={gravatar.url(data.email, { s: '100%', d: 'retro' })} alt="img" />
       )}
