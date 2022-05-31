@@ -37,7 +37,7 @@ if (process.env.NODE_ENV === "production") {
 }
 app.use(
   cors({
-    origin: ["http://localhost:3000", "foodweb.com", "http://3.34.131.46"],
+    origin: ["http://localhost:3000", "foodweb.com", "http://13.125.221.119	"],
     credentials: true,
   })
 );
