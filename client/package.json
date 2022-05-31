@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
+    "build": "cross-env ANALYZE=true NODE_ENV=production next build",
+    "start": "cross-env NODE_ENV=production next start",
     "lint": "next lint"
   },
   "dependencies": {
@@ -14,9 +14,11 @@
     "@fortawesome/free-regular-svg-icons": "^6.1.1",
     "@fortawesome/free-solid-svg-icons": "^6.1.1",
     "@fortawesome/react-fontawesome": "^0.1.18",
+    "@next/bundle-analyzer": "^12.1.6",
     "@redux-saga/core": "^1.1.3",
     "@reduxjs/toolkit": "^1.8.1",
     "axios": "^0.27.2",
+    "cross-env": "^7.0.3",
     "dotenv": "^16.0.1",
     "gravatar": "^1.8.2",
     "next": "12.1.4",

@@ -50,7 +50,7 @@ export interface Comment {
   id: number;
   content: string;
   createdAt: Date;
-  updatedAt: Date;
+  updatedAt: string;
   PostId: number;
   UserId: number;
   User: CommentUser;

@@ -39,13 +39,7 @@ const CommentUser = styled.div`
 `;
 const Form = styled.form<{ editMode: boolean }>`
   width: 100%;
-  /* background-color: red; */
-  /* position: relative; */
-  /* border: ${(props) => (props.editMode ? '1px solid black' : 'none')}; */
   .submit {
-    /* position: absolute; */
-    /* right: 2%; */
-    /* top: 10%; */
     cursor: pointer;
   }
 `;

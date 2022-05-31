@@ -87,9 +87,6 @@ router.post(
 // PASSWORD CHANGE
 router.patch("/password", isLoggedIn, async (req, res, next) => {
   try {
-    console.log(req.body.currentPassword);
-    console.log(req.body.changePassword);
-    console.log(req.body.newPasswordOk);
     const comparePassword = await bcrypt.compare(
       req.body.currentPassword,
       req.user.password
