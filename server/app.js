@@ -8,6 +8,7 @@ const dotenv = require("dotenv");
 const path = require("path");
 const hpp = require("hpp");
 const helmet = require("helmet");
+const favicon = require("serve-favicon");
 
 const db = require("./models");
 const passportConfig = require("./passport");
@@ -19,6 +20,7 @@ const hashtagRouter = require("./routes/hashtag");
 dotenv.config();
 
 const app = express();
+
 db.sequelize
   .sync()
   .then(() => {
@@ -37,7 +39,7 @@ if (process.env.NODE_ENV === "production") {
 }
 app.use(
   cors({
-    origin: ["http://localhost:3000", "foodweb.com", "http://13.125.221.119"],
+    origin: ["http://localhost:3000", "foodweb.com", "http://3.39.21.117"],
     credentials: true,
   })
 );
