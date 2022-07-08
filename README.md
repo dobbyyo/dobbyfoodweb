@@ -1,24 +1,44 @@
-- 유저
-- [x] 로그인
-- [x] 회원가입
-- [x] 회원탈퇴
-- [x] 비밀번호 변경
-- [x] 이메일 변경
-- [x] 유저 아바타
-- [x] 닉네임 변경
-- [x] 각 유저 프로필
-- [x] 팔로워, 팔로우
+# Food Web
 
-- 게시글
-- [x] 게시글 업로드
-- [x] 게시글 삭제
-- [x] 게시글 수정
-- [x] 전체 게시글 가져오기
-- [x] 특정 해시태그 게시글 가져오기
-- [x] 특정 카테고리 게시글 가져오기
-- [x] 유저가 올린 게시글 전체 가져오기
-- [x] 게시글 찜하기
-- [x] 좋아요, 싫어요
+## 한 줄 소개
 
-- 댓글
-- [x] 댓글 CRUD
+---
+
+사용자들이 맛집들을 추천해주는 웹 서비스
+
+## 📖 서비스 내용
+
+- 사용자들이 먹고 맛있다는 생각하는 음식점을 추천해주는 사이트입니다.
+
+## ⭐  핵심 기능
+
+- 무한 스크롤링
+- NextJs를 이용한 SSR 활용
+- Kakao 지도 API, Daum 주소 API를 활용한 지도에 음식점 찾거나 지정.
+
+## 🛠 기술 스택
+
+### Front-End
+
+- ReactJs, TypeScript
+- NextJs
+- Styled Component
+- Redux-toolkit
+- Redux(Saga)
+- Eslint, Prettier
+- Bable, Webpack
+
+### Back-End
+
+- NodeJs
+- Sequelize
+- Express
+
+### DB
+
+- MySQL
+
+---
+
+자세히 보기
+노션주소 - https://www.notion.so/Food-Web-a37892f68fda4559a87194982d98e843
