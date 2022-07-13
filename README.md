@@ -41,4 +41,4 @@
 ---
 
 자세히 보기
-노션주소 - https://www.notion.so/Food-Web-a37892f68fda4559a87194982d98e843
+노션주소 - https://acidic-stilton-3e9.notion.site/Food-Web- a37892f68fda4559a87194982d98e843
